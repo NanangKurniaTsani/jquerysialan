@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projek Penghitungan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Studi Kasus 1: Penghitungan Gaji Karyawan</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gajiModal">Hitung Gaji</button>
+
+        <!-- Modal Gaji -->
+        <div class="modal fade" id="gajiModal" tabindex="-1" aria-labelledby="gajiModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="gajiModalLabel">Hitung Gaji Karyawan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="gajiPokok" class="form-label">Gaji Pokok</label>
+                                <input type="text" class="form-control" id="gajiPokok" placeholder="Masukkan Gaji Pokok">
+                            </div>
+                            <div class="mb-3">
+                                <label for="tunjangan" class="form-label">Tunjangan</label>
+                                <input type="text" class="form-control" id="tunjangan" placeholder="Masukkan Tunjangan">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bonus" class="form-label">Bonus</label>
+                                <input type="text" class="form-control" id="bonus" placeholder="Masukkan Bonus">
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success" id="btnHitungGaji">Hitung Gaji</button>
+                                <button type="button" class="btn btn-warning" id="btnResetGaji">Reset</button>
+                            </div>
+                        </form>
+                        <div id="hasilGaji"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mt-5">Studi Kasus 2: Penentuan Grade Nilai Mahasiswa</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gradeModal">Hitung Grade</button>
+
+        <!-- Modal Grade -->
+        <div class="modal fade" id="gradeModal" tabindex="-1" aria-labelledby="gradeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="gradeModalLabel">Hitung Grade Nilai Mahasiswa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="nilai" class="form-label">Nilai Ujian</label>
+                                <input type="text" class="form-control" id="nilai" placeholder="Masukkan Nilai Ujian">
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success" id="btnHitungGrade">Hitung Grade</button>
+                                <button type="button" class="btn btn-warning" id="btnResetGrade">Reset</button>
+                            </div>
+                        </form>
+                        <div id="hasilGrade"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mt-5">Studi Kasus 3: Rata-rata Nilai UAS</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rataRataModal">Hitung Rata-rata</button>
+
+        <!-- Modal Rata-rata -->
+        <div class="modal fade" id="rataRataModal" tabindex="-1" aria-labelledby="rataRataModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rataRataModalLabel">Hitung Rata-rata Nilai UAS</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="nilaiInput" class="form-label">Input Nilai UAS (Pisahkan dengan koma)</label>
+                                <input type="text" class="form-control" id="nilaiInput" placeholder="Masukkan Nilai UAS">
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success" id="btnHitungRataRata">Hitung Rata-rata</button>
+                                <button type="button" class="btn btn-warning" id="btnResetRataRata">Reset</button>
+                            </div>
+                        </form>
+                        <div id="hasilRataRata"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
