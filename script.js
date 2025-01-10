@@ -1,156 +1,173 @@
 $(document).ready(function() {
-    // Validasi keypress untuk input angka
-    $('#gajiPokok, #tunjangan, #bonus, #nilaiUjian, #nilai1, #nilai2, #nilai3, #nilai4, #nilai5').on('keypress', function(e) {
-        if (e.which < 48 || e.which > 57) { // 48-57 adalah kode karakter untuk angka 0-9
-            e.preventDefault(); // Mencegah input selain angka
-        }
+    // Menambahkan event listener untuk tombol reset
+    $(".btn-reset").click(function() {
+        // Reset semua input di dalam modal
+        $(this).closest('.modal-body').find('input[type="text"]').val('');
     });
 
-    // Studi Kasus 1: Hitung Gaji Karyawan
-    $('#btnHitungGaji').click(function() {
-        let gajiPokok = $('#gajiPokok').val();
-        let tunjangan = $('#tunjangan').val();
-        let bonus = $('#bonus').val();
+    // Validasi input hanya angka
+    function isValidNumber(value) {
+        return !isNaN(value) && value !== '';
+    }
 
-        // Validasi input kosong
-        if (gajiPokok === "" || tunjangan === "" || bonus === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Semua field harus diisi!',
-            });
-            return;
+    // Format Rupiah
+    function formatRupiah(number) {
+        return number.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+    }
+
+    // Fungsi untuk berpindah ke input berikutnya saat menekan Enter
+    function moveToNextInput(currentInput) {
+        var nextInput = currentInput.next('input');
+        if (nextInput.length) {
+            nextInput.focus();
         }
+    }
 
-        // Validasi angka
-        if (isNaN(gajiPokok) || isNaN(tunjangan) || isNaN(bonus)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Masukkan hanya angka!',
-            });
-            return;
-        }
+    // Hitung Gaji
+    $("#btnHitungGaji").click(function() {
+        var gajiPokok = $("#gajiPokok").val();
+        var tunjangan = $("#tunjangan").val();
+        var bonus = $("#bonus").val();
 
-        // Hitung Gaji Kotor, Pajak, dan Gaji Bersih
-        let gajiKotor = parseInt(gajiPokok) + parseInt(tunjangan) + parseInt(bonus);
-        let pajak = gajiKotor * 0.1; // Pajak 10%
-        let gajiBersih = gajiKotor - pajak;
-
-        // Tampilkan hasil
-        $('#hasilGaji').html(`
-            <h5>Hasil Perhitungan:</h5>
-            <p>Gaji Kotor: Rp ${gajiKotor.toLocaleString()}</p>
-            <p>Pajak (10%): Rp ${pajak.toLocaleString()}</p>
-            <p>Gaji Bersih: Rp ${gajiBersih.toLocaleString()}</p>
-        `);
-    });
-
-    // Reset input form Gaji
-    $('#btnResetGaji').click(function() {
-        $('#gajiPokok').val('');
-        $('#tunjangan').val('');
-        $('#bonus').val('');
-        $('#hasilGaji').html('');
-    });
-
-    // Studi Kasus 2: Tentukan Grade
-    $('#btnTentukanGrade').click(function() {
-        let nilaiUjian = $('#nilaiUjian').val();
-
-        // Validasi input kosong
-        if (nilaiUjian === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Nilai Ujian harus diisi!',
-            });
-            return;
-        }
-
-        // Validasi angka
-        if (isNaN(nilaiUjian)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Masukkan hanya angka!',
-            });
-            return;
-        }
-
-        // Tentukan Grade
-        let grade;
-        if (nilaiUjian >= 85) {
-            grade = 'A';
-        } else if (nilaiUjian >= 70) {
-            grade = 'B';
-        } else if (nilaiUjian >= 60) {
-            grade = 'C';
-        } else if (nilaiUjian >= 40) {
-            grade = 'D';
+        // Validasi apakah semua input adalah angka
+        if (!isValidNumber(gajiPokok) || !isValidNumber(tunjangan) || !isValidNumber(bonus)) {
+            Swal.fire('Harap masukkan nilai yang valid (hanya angka)!'); // Alert jika input tidak valid
         } else {
-            grade = 'E';
-        }
+            gajiPokok = parseFloat(gajiPokok);
+            tunjangan = parseFloat(tunjangan);
+            bonus = parseFloat(bonus);
+            
+            // Hitung total gaji
+            var totalGaji = gajiPokok + tunjangan + bonus;
 
-        // Tampilkan hasil
-        $('#hasilGrade').html(`
-            <h5>Hasil Penentuan Grade:</h5>
-            <p>Grade: ${grade}</p>
-        `);
-    });
+            // Hitung pajak 10%
+            var pajak = totalGaji * 0.10;
+            var gajiSetelahPajak = totalGaji - pajak;
 
-    // Reset input form Grade
-    $('#btnResetGrade').click(function() {
-        $('#nilaiUjian').val('');
-        $('#hasilGrade').html('');
-    });
+            // Format gaji dan pajak dalam format Rupiah
+            var totalGajiFormatted = formatRupiah(totalGaji);
+            var pajakFormatted = formatRupiah(pajak);
+            var gajiSetelahPajakFormatted = formatRupiah(gajiSetelahPajak);
 
-    // Studi Kasus 3: Hitung Rata-rata Nilai
-    $('#btnHitungRata').click(function() {
-        let nilai1 = $('#nilai1').val();
-        let nilai2 = $('#nilai2').val();
-        let nilai3 = $('#nilai3').val();
-        let nilai4 = $('#nilai4').val();
-        let nilai5 = $('#nilai5').val();
-
-        // Validasi input kosong
-        if (nilai1 === "" || nilai2 === "" || nilai3 === "" || nilai4 === "" || nilai5 === "") {
             Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Semua nilai harus diisi!',
+                title: 'Perhitungan Gaji',
+                html: `
+                    <p>Total Gaji: ${totalGajiFormatted}</p>
+                    <p>Pajak (10%): ${pajakFormatted}</p>
+                    <p>Gaji Setelah Pajak: ${gajiSetelahPajakFormatted}</p>
+                `,
+                icon: 'success'
             });
-            return;
         }
-
-        // Validasi angka
-        if (isNaN(nilai1) || isNaN(nilai2) || isNaN(nilai3) || isNaN(nilai4) || isNaN(nilai5)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Masukkan hanya angka!',
-            });
-            return;
-        }
-
-        // Hitung rata-rata
-        let totalNilai = parseInt(nilai1) + parseInt(nilai2) + parseInt(nilai3) + parseInt(nilai4) + parseInt(nilai5);
-        let rataRata = totalNilai / 5;
-
-        // Tampilkan hasil
-        $('#hasilRata').html(`
-            <h5>Hasil Rata-rata:</h5>
-            <p>Rata-rata Nilai: ${rataRata}</p>
-        `);
     });
 
-    // Reset input form Rata-rata
-    $('#btnResetRata').click(function() {
-        $('#nilai1').val('');
-        $('#nilai2').val('');
-        $('#nilai3').val('');
-        $('#nilai4').val('');
-        $('#nilai5').val('');
-        $('#hasilRata').html('');
+    // Hitung Grade
+    $("#btnHitungGrade").click(function() {
+        var nilai = $("#nilai").val();
+
+        // Validasi apakah input adalah angka
+        if (!isValidNumber(nilai)) {
+            Swal.fire('Harap masukkan nilai yang valid (hanya angka)!'); // Alert jika input tidak valid
+        } else {
+            nilai = parseFloat(nilai);
+            var grade = '';
+            if (nilai >= 85) grade = 'A';
+            else if (nilai >= 70) grade = 'B';
+            else if (nilai >= 50) grade = 'C';
+            else grade = 'D';
+
+            Swal.fire({
+                title: 'Grade Nilai',
+                html: `<p>Nilai: ${nilai}</p><p>Grade: ${grade}</p>`,
+                icon: 'success'
+            });
+        }
+    });
+
+    // Hitung Rata-rata Nilai
+    $("#btnHitungRata").click(function() {
+        var nilai1 = $("#nilai1").val();
+        var nilai2 = $("#nilai2").val();
+        var nilai3 = $("#nilai3").val();
+        var nilai4 = $("#nilai4").val();
+        var nilai5 = $("#nilai5").val();
+
+        // Validasi apakah semua input adalah angka
+        if (!isValidNumber(nilai1) || !isValidNumber(nilai2) || !isValidNumber(nilai3) || 
+            !isValidNumber(nilai4) || !isValidNumber(nilai5)) {
+            Swal.fire('Harap masukkan nilai yang valid (hanya angka)!'); // Alert jika input tidak valid
+        } else {
+            nilai1 = parseFloat(nilai1);
+            nilai2 = parseFloat(nilai2);
+            nilai3 = parseFloat(nilai3);
+            nilai4 = parseFloat(nilai4);
+            nilai5 = parseFloat(nilai5);
+
+            var totalNilai = nilai1 + nilai2 + nilai3 + nilai4 + nilai5;
+            var rataRata = totalNilai / 5;
+
+            Swal.fire({
+                title: 'Rata-rata Nilai',
+                html: `<p>Total Nilai: ${totalNilai}</p><p>Rata-rata Nilai: ${rataRata}</p>`,
+                icon: 'success'
+            });
+        }
+    });
+
+    // Event untuk berpindah input saat menekan Enter
+    $('input').on('keypress', function(e) {
+        if (e.which == 13) { // Cek jika tombol Enter ditekan
+            moveToNextInput($(this)); // Pindah ke input berikutnya
+        }
+    });
+
+    // Hitung otomatis jika semua input pada Studi Kasus sudah terisi dan Enter ditekan
+    $('#gajiPokok, #tunjangan, #bonus').on('keypress', function(e) {
+        if (e.which == 13) {
+            if ($('#gajiPokok').val() && $('#tunjangan').val() && $('#bonus').val()) {
+                $("#btnHitungGaji").click(); // Klik tombol Hitung Gaji jika semua input sudah terisi
+            }
+        }
+    });
+
+    $('#nilai').on('keypress', function(e) {
+        if (e.which == 13) {
+            if ($('#nilai').val()) {
+                $("#btnHitungGrade").click(); // Klik tombol Hitung Grade jika input sudah terisi
+            }
+        }
+    });
+
+    $('#nilai1, #nilai2, #nilai3, #nilai4, #nilai5').on('keypress', function(e) {
+        if (e.which == 13) {
+            if ($('#nilai1').val() && $('#nilai2').val() && $('#nilai3').val() && $('#nilai4').val() && $('#nilai5').val()) {
+                $("#btnHitungRata").click(); // Klik tombol Hitung Rata-rata jika semua input sudah terisi
+            }
+        }
+    });
+
+    // Pastikan bahwa saat input pertama pada Studi Kasus 1 diisi, tombol enter akan fokus ke input berikutnya
+    $('#gajiPokok').on('keypress', function(e) {
+        if (e.which == 13) {
+            if ($('#gajiPokok').val()) {
+                moveToNextInput($(this)); // Pindah ke input berikutnya
+            }
+        }
+    });
+
+    $('#tunjangan').on('keypress', function(e) {
+        if (e.which == 13) {
+            if ($('#tunjangan').val()) {
+                moveToNextInput($(this)); // Pindah ke input berikutnya
+            }
+        }
+    });
+
+    $('#bonus').on('keypress', function(e) {
+        if (e.which == 13) {
+            if ($('#bonus').val()) {
+                $("#btnHitungGaji").click(); // Klik tombol Hitung Gaji jika input sudah terisi
+            }
+        }
     });
 });

@@ -1,73 +1,24 @@
-body {
-    background-color: #f4f8fb;
-    font-family: 'Arial', sans-serif;
-}
-
-.container {
-    max-width: 800px;
-    margin-top: 50px;
-}
-
-.modal-content {
-    border-radius: 10px;
-}
-
-.btn {
-    border-radius: 50px;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-}
-
-.btn-primary {
-    background-color: #5f6368;
-    border-color: #5f6368;
-}
-
-.btn-primary:hover {
-    background-color: #434848;
-    border-color: #434848;
-}
-
-.modal-header {
-    background-color: #007bff;
+/* Styling untuk tombol Reset */
+.btn-reset {
+    background-color: #f44336;
     color: white;
-}
-
-.modal-footer .btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-.modal-footer .btn-warning:hover {
-    background-color: #e0a800;
-    border-color: #e0a800;
-}
-
-.modal-footer .btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
-.modal-footer .btn-success:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
-
-.result {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.result p {
-    margin: 5px 0;
-}
-
-.result h5 {
+    border: none;
     font-weight: bold;
+}
+
+.btn-reset:hover {
+    background-color: #d32f2f;
+}
+
+.btn-primary, .btn-success, .btn-warning {
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Styling untuk input field */
+input.form-control {
+    margin-bottom: 10px;
 }
