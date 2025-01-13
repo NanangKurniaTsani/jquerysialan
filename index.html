@@ -4,44 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tugas UAS jQuery</title>
-    <!-- Menggunakan Bootstrap untuk styling dasar -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Link ke file CSS eksternal -->
     <link rel="stylesheet" href="style.css">
-    <!-- Menggunakan SweetAlert2 untuk alert interaktif -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div class="container text-center mt-5">
-        <!-- Header aplikasi -->
-        <h1 class="mb-4">Tugas UAS jQuery</h1>
-        <div class="row justify-content-center">
-            <!-- Studi Kasus 1: Gaji Karyawan -->
-            <div class="col-md-3">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Studi Kasus 1: Gaji Karyawan</h5>
-                        <!-- Tombol untuk membuka modal perhitungan gaji -->
+    <div class="container-fluid py-4">
+        <h1 class="text-center mb-4">Tugas UAS jQuery</h1>
+        <div class="row justify-content-center g-4">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title flex-grow-1">Studi Kasus 1: Gaji Karyawan</h5>
                         <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#modalGaji">Hitung Gaji</button>
                     </div>
                 </div>
             </div>
-            <!-- Studi Kasus 2: Grade Nilai -->
-            <div class="col-md-3">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Studi Kasus 2: Grade Nilai</h5>
-                        <!-- Tombol untuk membuka modal penentuan grade nilai -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title flex-grow-1">Studi Kasus 2: Grade Nilai</h5>
                         <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#modalGrade">Tentukan Grade</button>
                     </div>
                 </div>
             </div>
-            <!-- Studi Kasus 3: Rata-rata Nilai -->
-            <div class="col-md-3">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Studi Kasus 3: Rata-rata Nilai</h5>
-                        <!-- Tombol untuk membuka modal perhitungan rata-rata nilai -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title flex-grow-1">Studi Kasus 3: Rata-rata Nilai</h5>
                         <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#modalRata">Hitung Rata-rata</button>
                     </div>
                 </div>
@@ -49,41 +38,40 @@
         </div>
     </div>
 
-    <!-- Modal untuk Studi Kasus 1: Gaji Karyawan -->
+    <!-- Modal Gaji Karyawan -->
     <div class="modal fade" id="modalGaji" tabindex="-1" aria-labelledby="modalGajiLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalGajiLabel">Studi Kasus 1: Gaji Karyawan</h5>
-                    <!-- Tombol untuk menutup modal -->
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Input untuk Gaji Pokok -->
                     <div class="mb-3">
                         <label for="gajiPokok" class="form-label">Gaji Pokok</label>
                         <input type="text" id="gajiPokok" class="form-control">
                     </div>
-                    <!-- Input untuk Tunjangan -->
                     <div class="mb-3">
                         <label for="tunjangan" class="form-label">Tunjangan</label>
                         <input type="text" id="tunjangan" class="form-control">
                     </div>
-                    <!-- Input untuk Bonus -->
                     <div class="mb-3">
                         <label for="bonus" class="form-label">Bonus</label>
                         <input type="text" id="bonus" class="form-control">
                     </div>
-                    <!-- Tombol untuk menghitung gaji -->
+                    <div class="mb-3">
+                        <label for="pajak" class="form-label">Pajak (%)</label>
+                        <input type="text" id="pajak" class="form-control">
+                    </div>
                     <button id="btnHitungGaji" class="btn btn-primary w-100">Hitung Gaji</button>
-                    <!-- Tombol untuk mereset input -->
                     <button type="reset" class="btn btn-reset w-100 mt-3">Reset</button>
+                    <div id="hasilGaji" class="mt-4 result-container"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal untuk Studi Kasus 2: Grade Nilai -->
+    <!-- Modal Grade Nilai -->
     <div class="modal fade" id="modalGrade" tabindex="-1" aria-labelledby="modalGradeLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -92,21 +80,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Input untuk memasukkan nilai -->
                     <div class="mb-3">
                         <label for="nilai" class="form-label">Masukkan Nilai</label>
                         <input type="text" id="nilai" class="form-control">
                     </div>
-                    <!-- Tombol untuk menentukan grade -->
                     <button id="btnHitungGrade" class="btn btn-success w-100">Tentukan Grade</button>
-                    <!-- Tombol untuk mereset input -->
                     <button type="reset" class="btn btn-reset w-100 mt-3">Reset</button>
+                    <div id="hasilGrade" class="mt-4 result-container"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal untuk Studi Kasus 3: Rata-rata Nilai -->
+    <!-- Modal Rata-rata Nilai -->
     <div class="modal fade" id="modalRata" tabindex="-1" aria-labelledby="modalRataLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -115,29 +101,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Input untuk nilai-nilai yang akan dihitung rata-ratanya -->
-                    <div id="inputsRata">
-                        <label class="form-label">Masukkan Nilai:</label>
-                        <input type="text" id="nilai1" class="form-control mb-2">
-                        <input type="text" id="nilai2" class="form-control mb-2">
-                        <input type="text" id="nilai3" class="form-control mb-2">
-                        <input type="text" id="nilai4" class="form-control mb-2">
-                        <input type="text" id="nilai5" class="form-control mb-2">
+                    <div class="mb-3">
+                        <label for="jumlahNilai" class="form-label">Jumlah Nilai yang Akan Diinput</label>
+                        <input type="number" id="jumlahNilai" class="form-control" min="1">
                     </div>
-                    <!-- Tombol untuk menghitung rata-rata -->
+                    <div id="inputsRata"></div>
                     <button id="btnHitungRata" class="btn btn-warning w-100">Hitung Rata-rata</button>
-                    <!-- Tombol untuk mereset input -->
                     <button type="reset" class="btn btn-reset w-100 mt-3">Reset</button>
+                    <div id="hasilRata" class="mt-4 result-container"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Script untuk Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script untuk jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <!-- Link ke file JavaScript eksternal -->
     <script src="script.js"></script>
 </body>
 </html>
+

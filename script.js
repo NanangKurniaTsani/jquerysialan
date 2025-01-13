@@ -1,176 +1,183 @@
-$(document).ready(function() {
-    // Event listener untuk tombol reset
+$(document).ready(() => {
     $(".btn-reset").click(function() {
-        // Menghapus nilai semua input teks di dalam modal saat tombol reset ditekan
-        $(this).closest('.modal-body').find('input[type="text"]').val('');
+        $(this).closest('.modal-body').find('input[type="text"], input[type="number"]').val('');
+        $('#inputsRata').empty();
+        $('.result-container').empty();
     });
 
-    // Fungsi untuk validasi input angka
-    function isValidNumber(value) {
-        // Mengecek apakah nilai bukan NaN (Not a Number) dan tidak kosong
-        return !isNaN(value) && value !== '';
-    }
+    const isValidNumber = (value) => !isNaN(value) && value !== '';
 
-    // Fungsi untuk memformat angka menjadi format Rupiah
-    function formatRupiah(number) {
-        // Menggunakan fungsi toLocaleString untuk format sesuai dengan IDR (Rupiah)
-        return number.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-    }
+    const formatRupiah = (number) => {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
+    };
 
-    // Fungsi untuk memindahkan fokus ke input berikutnya
-    function moveToNextInput(currentInput) {
-        // Mencari elemen input berikutnya dalam urutan
-        var nextInput = currentInput.next('input');
+    const moveToNextInput = (currentInput) => {
+        const nextInput = currentInput.parent().next().find('input');
         if (nextInput.length) {
-            // Jika elemen input berikutnya ditemukan, pindahkan fokus ke sana
             nextInput.focus();
-        }
-    }
-
-    // Event listener untuk tombol "Hitung Gaji"
-    $("#btnHitungGaji").click(function() {
-        // Mendapatkan nilai dari input gaji pokok, tunjangan, dan bonus
-        var gajiPokok = $("#gajiPokok").val();
-        var tunjangan = $("#tunjangan").val();
-        var bonus = $("#bonus").val();
-
-        // Validasi: memastikan semua input adalah angka valid
-        if (!isValidNumber(gajiPokok) || !isValidNumber(tunjangan) || !isValidNumber(bonus)) {
-            // Menampilkan alert menggunakan SweetAlert jika input tidak valid
-            Swal.fire('Harap masukkan nilai yang valid (hanya angka)!');
         } else {
-            // Mengonversi nilai input menjadi angka
-            gajiPokok = parseFloat(gajiPokok);
-            tunjangan = parseFloat(tunjangan);
-            bonus = parseFloat(bonus);
-            
-            // Menghitung total gaji
-            var totalGaji = gajiPokok + tunjangan + bonus;
-
-            // Menghitung pajak sebesar 10% dari total gaji
-            var pajak = totalGaji * 0.10;
-            var gajiSetelahPajak = totalGaji - pajak;
-
-            // Memformat nilai gaji dan pajak dalam format Rupiah
-            var totalGajiFormatted = formatRupiah(totalGaji);
-            var pajakFormatted = formatRupiah(pajak);
-            var gajiSetelahPajakFormatted = formatRupiah(gajiSetelahPajak);
-
-            // Menampilkan hasil perhitungan dalam bentuk SweetAlert
-            Swal.fire({
-                title: 'Perhitungan Gaji',
-                html: `
-                    <p>Total Gaji: ${totalGajiFormatted}</p>
-                    <p>Pajak (10%): ${pajakFormatted}</p>
-                    <p>Gaji Setelah Pajak: ${gajiSetelahPajakFormatted}</p>
-                `,
-                icon: 'success'
-            });
+            currentInput.closest('.modal-body').find('button').first().focus();
         }
+    };
+
+    const validateInput = (inputId, errorMessage) => {
+        const value = $(`#${inputId}`).val();
+        if (!isValidNumber(value)) {
+            $(`#${inputId}`).addClass('is-invalid');
+            $(`#${inputId}`).next('.invalid-feedback').remove();
+            $(`#${inputId}`).after(`<div class="invalid-feedback">${errorMessage}</div>`);
+            $(`#${inputId}`).focus();
+            return false;
+        }
+        $(`#${inputId}`).removeClass('is-invalid');
+        $(`#${inputId}`).next('.invalid-feedback').remove();
+        return true;
+    };
+
+    $("#btnHitungGaji").click(() => {
+        if (!validateInput('gajiPokok', 'Harap masukkan Gaji Pokok yang valid!')) return;
+        if (!validateInput('tunjangan', 'Harap masukkan Tunjangan yang valid!')) return;
+        if (!validateInput('bonus', 'Harap masukkan Bonus yang valid!')) return;
+        if (!validateInput('pajak', 'Harap masukkan Pajak yang valid!')) return;
+
+        const gajiPokok = parseFloat($("#gajiPokok").val());
+        const tunjangan = parseFloat($("#tunjangan").val());
+        const bonus = parseFloat($("#bonus").val());
+        const pajak = parseFloat($("#pajak").val());
+
+        const totalGaji = gajiPokok + tunjangan + bonus;
+        const pajakNominal = totalGaji * (pajak / 100);
+        const gajiSetelahPajak = totalGaji - pajakNominal;
+
+        const totalGajiFormatted = formatRupiah(totalGaji);
+        const pajakFormatted = formatRupiah(pajakNominal);
+        const gajiSetelahPajakFormatted = formatRupiah(gajiSetelahPajak);
+
+        $("#hasilGaji").html(`
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Hasil Perhitungan Gaji</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Total Gaji</th>
+                            <td>${totalGajiFormatted}</td>
+                        </tr>
+                        <tr>
+                            <th>Pajak (${pajak}%)</th>
+                            <td>${pajakFormatted}</td>
+                        </tr>
+                        <tr>
+                            <th>Gaji Setelah Pajak</th>
+                            <td>${gajiSetelahPajakFormatted}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        `);
     });
 
-    // Event listener untuk tombol "Hitung Grade"
-    $("#btnHitungGrade").click(function() {
-        // Mendapatkan nilai dari input nilai
-        var nilai = $("#nilai").val();
+    $("#btnHitungGrade").click(() => {
+        if (!validateInput('nilai', 'Harap masukkan Nilai yang valid!')) return;
 
-        // Validasi: memastikan input adalah angka valid
-        if (!isValidNumber(nilai)) {
-            // Menampilkan alert menggunakan SweetAlert jika input tidak valid
-            Swal.fire('Harap masukkan nilai yang valid (hanya angka)!');
-        } else {
-            // Mengonversi nilai input menjadi angka
-            nilai = parseFloat(nilai);
-            var grade = '';
+        const nilai = parseFloat($("#nilai").val());
+        let grade = '';
+        let color = '';
 
-            // Menentukan grade berdasarkan nilai
-            if (nilai >= 85) grade = 'A'; // Grade A untuk nilai >= 85
-            else if (nilai >= 70) grade = 'B'; // Grade B untuk nilai >= 70
-            else if (nilai >= 50) grade = 'C'; // Grade C untuk nilai >= 50
-            else grade = 'D'; // Grade D untuk nilai di bawah 50
+        if (nilai >= 85) { grade = 'A'; color = 'text-success'; }
+        else if (nilai >= 70) { grade = 'B'; color = 'text-primary'; }
+        else if (nilai >= 50) { grade = 'C'; color = 'text-warning'; }
+        else { grade = 'D'; color = 'text-danger'; }
 
-            // Menampilkan hasil grade dalam bentuk SweetAlert
-            Swal.fire({
-                title: 'Grade Nilai',
-                html: `<p>Nilai: ${nilai}</p><p>Grade: ${grade}</p>`,
-                icon: 'success'
-            });
-        }
+        $("#hasilGrade").html(`
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Hasil Penentuan Grade</h5>
+                    <p class="card-text">Nilai: ${nilai}</p>
+                    <p class="card-text">Grade: <span class="fs-1 fw-bold ${color}">${grade}</span></p>
+                </div>
+            </div>
+        `);
     });
 
-    // Event listener untuk tombol "Hitung Rata-rata"
-    $("#btnHitungRata").click(function() {
-        // Mendapatkan nilai dari 5 input nilai
-        var nilai1 = $("#nilai1").val();
-        var nilai2 = $("#nilai2").val();
-        var nilai3 = $("#nilai3").val();
-        var nilai4 = $("#nilai4").val();
-        var nilai5 = $("#nilai5").val();
-
-        // Validasi: memastikan semua input adalah angka valid
-        if (!isValidNumber(nilai1) || !isValidNumber(nilai2) || !isValidNumber(nilai3) || 
-            !isValidNumber(nilai4) || !isValidNumber(nilai5)) {
-            // Menampilkan alert menggunakan SweetAlert jika input tidak valid
-            Swal.fire('Harap masukkan nilai yang valid (hanya angka)!');
-        } else {
-            // Mengonversi nilai input menjadi angka
-            nilai1 = parseFloat(nilai1);
-            nilai2 = parseFloat(nilai2);
-            nilai3 = parseFloat(nilai3);
-            nilai4 = parseFloat(nilai4);
-            nilai5 = parseFloat(nilai5);
-
-            // Menghitung total nilai dan rata-rata
-            var totalNilai = nilai1 + nilai2 + nilai3 + nilai4 + nilai5;
-            var rataRata = totalNilai / 5;
-
-            // Menampilkan hasil rata-rata dalam bentuk SweetAlert
-            Swal.fire({
-                title: 'Rata-rata Nilai',
-                html: `<p>Total Nilai: ${totalNilai}</p><p>Rata-rata Nilai: ${rataRata}</p>`,
-                icon: 'success'
-            });
+    $("#jumlahNilai").on('change', function() {
+        const jumlah = $(this).val();
+        let inputsHtml = '';
+        for (let i = 1; i <= jumlah; i++) {
+            inputsHtml += `<div class="mb-2">
+                <label for="nilai${i}" class="form-label">Nilai ${i}</label>
+                <input type="text" id="nilai${i}" class="form-control nilai-input">
+            </div>`;
         }
+        $("#inputsRata").html(inputsHtml);
     });
 
-    // Event handler untuk memindahkan fokus ke input berikutnya saat Enter ditekan
-    $('input').on('keypress', function(e) {
-        if (e.which == 13) { // Cek apakah tombol Enter ditekan
-            moveToNextInput($(this)); // Pindahkan fokus ke input berikutnya
-        }
-    });
+    $("#btnHitungRata").click(() => {
+        const inputs = $(".nilai-input");
+        let total = 0;
+        let count = 0;
 
-    // Event untuk menghitung otomatis jika semua input pada Studi Kasus 1 sudah terisi dan Enter ditekan
-    $('#gajiPokok, #tunjangan, #bonus').on('keypress', function(e) {
-        if (e.which == 13) {
-            if ($('#gajiPokok').val() && $('#tunjangan').val() && $('#bonus').val()) {
-                $("#btnHitungGaji").click(); // Klik tombol Hitung Gaji
+        for (let i = 0; i < inputs.length; i++) {
+            const nilai = $(inputs[i]).val();
+            if (!isValidNumber(nilai)) {
+                $(inputs[i]).addClass('is-invalid');
+                $(inputs[i]).next('.invalid-feedback').remove();
+                $(inputs[i]).after(`<div class="invalid-feedback">Harap masukkan nilai yang valid!</div>`);
+                $(inputs[i]).focus();
+                return;
             }
+            $(inputs[i]).removeClass('is-invalid');
+            $(inputs[i]).next('.invalid-feedback').remove();
+            total += parseFloat(nilai);
+            count++;
+        }
+
+        if (count === 0) {
+            $("#hasilRata").html('<div class="alert alert-danger">Harap masukkan setidaknya satu nilai!</div>');
+            return;
+        }
+
+        const rataRata = total / count;
+        $("#hasilRata").html(`
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Hasil Perhitungan Rata-rata</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Total Nilai</th>
+                            <td>${total}</td>
+                        </tr>
+                        <tr>
+                            <th>Jumlah Nilai</th>
+                            <td>${count}</td>
+                        </tr>
+                        <tr>
+                            <th>Rata-rata Nilai</th>
+                            <td>${rataRata.toFixed(2)}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        `);
+    });
+
+    $('#gajiPokok, #tunjangan, #bonus, #pajak').on('keypress', function(e) {
+        if (e.which == 13) {
+            moveToNextInput($(this));
         }
     });
 
-    // Event untuk menghitung grade otomatis jika Enter ditekan
     $('#nilai').on('keypress', function(e) {
         if (e.which == 13) {
             if ($('#nilai').val()) {
-                $("#btnHitungGrade").click(); // Klik tombol Hitung Grade
+                $("#btnHitungGrade").click();
             }
         }
     });
 
-    // Event untuk menghitung rata-rata otomatis jika semua input sudah terisi dan Enter ditekan
-    $('#nilai1, #nilai2, #nilai3, #nilai4, #nilai5').on('keypress', function(e) {
+    $(document).on('keypress', '.nilai-input', function(e) {
         if (e.which == 13) {
-            if ($('#nilai1').val() && $('#nilai2').val() && $('#nilai3').val() && $('#nilai4').val() && $('#nilai5').val()) {
-                $("#btnHitungRata").click(); // Klik tombol Hitung Rata-rata
-            }
-        }
-    });
-
-    // Event tambahan untuk fokus ke input berikutnya saat Enter ditekan di Studi Kasus 1
-    $('#gajiPokok, #tunjangan, #bonus').on('keypress', function(e) {
-        if (e.which == 13) {
-            moveToNextInput($(this)); // Pindahkan fokus ke input berikutnya
+            moveToNextInput($(this));
         }
     });
 });
+

@@ -1,9 +1,26 @@
-/* Styling untuk tombol Reset */
+body {
+    background-color: #f8f9fa;
+}
+
+.container-fluid {
+    max-width: 1200px;
+}
+
+.card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
 .btn-reset {
     background-color: #f44336;
     color: white;
     border: none;
     font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 .btn-reset:hover {
@@ -12,13 +29,63 @@
 
 .btn-primary, .btn-success, .btn-warning {
     font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-warning:hover {
+    transform: scale(1.05);
 }
 
 .modal-body {
     padding: 20px;
 }
 
-/* Styling untuk input field */
 input.form-control {
     margin-bottom: 10px;
 }
+
+.result-container {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background-color: #f1f3f5;
+}
+
+.fs-1 {
+    font-size: 2.5rem !important;
+}
+
+@media (max-width: 576px) {
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .fs-1 {
+        font-size: 2rem !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 992px) {
+    .card {
+        margin-bottom: 30px;
+    }
+}
+
