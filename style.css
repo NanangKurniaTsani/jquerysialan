@@ -1,24 +1,26 @@
 /* Styling untuk tombol Reset */
 .btn-reset {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    font-weight: bold;
+    background-color: #f44336; /* Memberikan warna dasar merah untuk tombol Reset */
+    color: white; /* Teks tombol berwarna putih agar kontras dengan warna latar */
+    border: none; /* Menghapus border tombol agar tampil lebih minimalis */
+    font-weight: bold; /* Menjadikan teks tombol lebih tebal untuk penekanan visual */
 }
 
 .btn-reset:hover {
-    background-color: #d32f2f;
+    background-color: #d32f2f; /* Warna merah lebih gelap saat tombol di-hover untuk memberikan efek interaktif */
 }
 
+/* Styling untuk tombol lainnya (Primary, Success, Warning) */
 .btn-primary, .btn-success, .btn-warning {
-    font-weight: bold;
+    font-weight: bold; /* Membuat teks pada tombol ini lebih tebal agar lebih terlihat */
 }
 
+/* Styling untuk area isi modal */
 .modal-body {
-    padding: 20px;
+    padding: 20px; /* Memberikan jarak di dalam modal untuk kenyamanan tata letak */
 }
 
 /* Styling untuk input field */
 input.form-control {
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Memberikan jarak antar input field untuk tata letak yang rapi */
 }
